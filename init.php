@@ -137,6 +137,9 @@ if (!defined('APP_DEFAULT_ASSIGNED_EMAILS')) {
 if (!defined('APP_DEFAULT_NEW_EMAILS')) {
     define('APP_DEFAULT_NEW_EMAILS', 0);
 }
+if (!defined('APP_DEFAULT_COPY_OF_OWN_ACTION')) {
+    define('APP_DEFAULT_COPY_OF_OWN_ACTION', 0);
+}
 if (!defined('APP_RELATIVE_URL')) {
     define('APP_RELATIVE_URL', '/');
 }
@@ -204,3 +207,7 @@ if (APP_MAINTENANCE){
         exit(0);
     }
 }
+
+// Default IRC category
+define("APP_EVENTUM_IRC_CATEGORY_DEFAULT", "default");
+define("APP_EVENTUM_IRC_CATEGORY_SPAM", "spam");

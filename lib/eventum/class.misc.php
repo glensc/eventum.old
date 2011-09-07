@@ -109,7 +109,7 @@ class Misc
             echo " [required] -> ";
         }
         flush();
-        $input = trim(self::getInput(true));
+        $input = self::getInputLine();
         if (empty($input)) {
             if ($default_value === FALSE) {
                 die("ERROR: Required parameter was not provided!\n");
@@ -121,37 +121,16 @@ class Misc
         }
     }
 
-
     /**
-     * Method used to get the standard input.
+     * Method used to get a line from the standard input.
      *
      * @access  public
      * @return  string The standard input value
      */
-    function getInput($is_one_liner = FALSE)
+    private static function getInputLine()
     {
-        static $return;
-
-        if (!empty($return)) {
-            return $return;
-        }
-
-        $terminator = "\n";
-
-        $stdin = fopen("php://stdin", "r");
-        $input = '';
-        while (!feof($stdin)) {
-            $buffer = fgets($stdin, 256);
-            $input .= $buffer;
-            if (($is_one_liner) && (strstr($input, $terminator))) {
-                break;
-            }
-        }
-        fclose($stdin);
-        $return = $input;
-        return $input;
+        return trim(fgets(STDIN));
     }
-
 
     /**
      * Method used to check the spelling of a given text.
@@ -803,5 +782,27 @@ class Misc
             }
         }
         return $qs;
+    }
+
+
+    /**
+     * Method used to get the full contents of the given file.
+     *
+     * @access  public
+     * @param   string $full_path The full path to the file
+     * @return  string The full contents of the file
+     */
+    function getFileContents($full_path)
+    {
+        if (!@file_exists($full_path)) {
+            return '';
+        }
+        $fp = @fopen($full_path, "rb");
+        if (!$fp) {
+            return '';
+        }
+        $contents = @fread($fp, filesize($full_path));
+        @fclose($fp);
+        return $contents;
     }
 }

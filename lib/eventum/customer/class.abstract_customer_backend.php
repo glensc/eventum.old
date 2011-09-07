@@ -153,7 +153,7 @@ class Abstract_Customer_Backend
      *
      * @access  public
      * @param   array $result The list of issues
-     * @see     Issue::getListing()
+     * @see     Search::getListing()
      */
     function getCustomerTitlesByIssues(&$result)
     {
@@ -423,9 +423,10 @@ class Abstract_Customer_Backend
      * @access  public
      * @param   string $field The field that we are trying to search against
      * @param   string $value The value that we are searching for
+     * @param   array  $options An array of options for search
      * @return  array The list of customers
      */
-    function lookup($field, $value)
+    function lookup($field, $value, $options)
     {
     }
 
