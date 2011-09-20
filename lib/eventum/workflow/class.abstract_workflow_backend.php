@@ -222,9 +222,10 @@ class Abstract_Workflow_Backend
      * @param   integer $resolution_id The resolution ID
      * @param   integer $status_id The status ID
      * @param   string $reason The reason for closing this issue
+     * @param   integer $usr_id The ID of the user closing this issue
      * @return  void
      */
-    function handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason)
+    function handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason, $usr_id)
     {
     }
 
@@ -513,5 +514,11 @@ class Abstract_Workflow_Backend
     public function getActiveGroup($prj_id)
     {
         return null;
+    }
+
+
+    public static function formatIRCMessage($prj_id, $notice, $issue_id = false, $usr_id = false, $category = false)
+    {
+        return $notice;
     }
 }

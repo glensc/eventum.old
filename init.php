@@ -79,6 +79,10 @@ if (!defined('APP_PEAR_PATH')) {
     define('APP_PEAR_PATH', APP_PATH . '/lib/pear');
 }
 
+if (!defined('APP_SPHINXAPI_PATH')) {
+    define('APP_SPHINXAPI_PATH', APP_PATH . '/lib/sphinxapi');
+}
+
 if (!defined('APP_SMARTY_PATH')) {
     define('APP_SMARTY_PATH', APP_PATH . '/lib/Smarty');
 }
@@ -131,6 +135,10 @@ if (!defined('APP_ENABLE_FULLTEXT')) {
     define('APP_ENABLE_FULLTEXT', false);
 }
 
+if (!defined('APP_FULLTEXT_SEARCH_CLASS')) {
+    define('APP_FULLTEXT_SEARCH_CLASS', 'mysql_fulltext_search');
+}
+
 if (!defined('APP_DEFAULT_ASSIGNED_EMAILS')) {
     define('APP_DEFAULT_ASSIGNED_EMAILS', 1);
 }
@@ -175,11 +183,17 @@ if (!defined('APP_MAINTENANCE')) {
 }
 
 // add pear to the include path
-if (defined('APP_PEAR_PATH')) {
+if (defined('APP_PEAR_PATH') && APP_PEAR_PATH) {
     set_include_path(APP_PEAR_PATH . PATH_SEPARATOR . get_include_path());
 }
+
 set_include_path(APP_LOCAL_PATH . PATH_SEPARATOR . get_include_path());
 set_include_path(APP_LOCAL_PATH . "/include/" . PATH_SEPARATOR . get_include_path());
+
+// add sphinxapi to the include path
+if (defined('APP_SPHINXAPI_PATH') && APP_SPHINXAPI_PATH) {
+    set_include_path(APP_SPHINXAPI_PATH . PATH_SEPARATOR . get_include_path());
+}
 
 require_once APP_INC_PATH . '/autoload.php';
 
@@ -210,4 +224,3 @@ if (APP_MAINTENANCE){
 
 // Default IRC category
 define("APP_EVENTUM_IRC_CATEGORY_DEFAULT", "default");
-define("APP_EVENTUM_IRC_CATEGORY_SPAM", "spam");

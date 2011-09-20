@@ -381,16 +381,17 @@ class Workflow
      * @param   boolean $send_notification Whether to send a notification about this action or not
      * @param   integer $resolution_id The resolution ID
      * @param   integer $status_id The status ID
-     * @param   string $reason The reason for closing this issue
+     * @param   string  $reason The reason for closing this issue
+     * @param   integer $usr_id The ID of the user closing this issue
      * @return  void
      */
-    function handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason)
+    function handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason, $usr_id)
     {
         if (!self::hasWorkflowIntegration($prj_id)) {
             return;
         }
         $backend =& self::_getBackend($prj_id);
-        $backend->handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason);
+        $backend->handleIssueClosed($prj_id, $issue_id, $send_notification, $resolution_id, $status_id, $reason, $usr_id);
     }
 
 
@@ -764,5 +765,15 @@ class Workflow
         }
         $backend =& self::_getBackend($prj_id);
         return $backend->getActiveGroup($prj_id);
+    }
+
+
+    public static function formatIRCMessage($prj_id, $notice, $issue_id = false, $usr_id = false, $category = false)
+    {
+        if (!self::hasWorkflowIntegration($prj_id)) {
+            return $notice;
+        }
+        $backend =& self::_getBackend($prj_id);
+        return $backend->formatIRCMessage($prj_id, $notice, $issue_id, $usr_id, $category);
     }
 }
