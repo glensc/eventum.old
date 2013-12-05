@@ -34,10 +34,7 @@ if (!file_exists(dirname(__FILE__) . '/config/config.php') || !filesize(dirname(
 }
 
 // setup change some PHP settings
-ini_set('date.timezone', 'UTC');
-ini_set('display_errors', 1);
 ini_set('memory_limit', '512M');
-ini_set('html_errors', 0);
 
 // prevent session from messing up the browser cache
 ini_set('session.cache_limiter', 'nocache');
