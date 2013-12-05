@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 encoding=utf-8: */
 // +----------------------------------------------------------------------+
@@ -5,7 +6,6 @@
 // +----------------------------------------------------------------------+
 // | Copyright (c) 2003 - 2008 MySQL AB                                   |
 // | Copyright (c) 2008 - 2010 Sun Microsystem Inc.                       |
-// | Copyright (c) 2011 - 2013 Eventum Team.                              |
 // |                                                                      |
 // | This program is free software; you can redistribute it and/or modify |
 // | it under the terms of the GNU General Public License as published by |
@@ -24,58 +24,36 @@
 // | 59 Temple Place - Suite 330                                          |
 // | Boston, MA 02111-1307, USA.                                          |
 // +----------------------------------------------------------------------+
-// | Authors: João Prado Maia <jpm@mysql.com>                             |
+// | Authors: Bryan Alsdorf <bryan@montyprogram.com>                      |
 // +----------------------------------------------------------------------+
+//
 
 /**
- * Class to hold methods and algorythms that woudln't fit in other classes, such
- * as functions to work around PHP bugs or incompatibilities between separate
- * PHP configurations.
- *
- * @version 1.0
- * @author João Prado Maia <jpm@mysql.com>
+ * Starts the IRC bot and automatically restarts it if it dies
  */
 
-class Misc
-{
-    /**
-     * Method used to print a prompt asking the user for information.
-     *
-     * @access  public
-     * @param   string $message The message to print
-     * @param   string $default_value The default value to be used if the user just press <enter>
-     * @return  string The user response
-     */
-    function prompt($message, $default_value)
-    {
-        echo $message;
-        if ($default_value !== FALSE) {
-            echo " [default: $default_value] -> ";
-        } else {
-            echo " [required] -> ";
-        }
-        flush();
-        $input = trim(self::getInput());
-        if (empty($input)) {
-            if ($default_value === FALSE) {
-                die("ERROR: Required parameter was not provided!\n");
-            } else {
-                return $default_value;
-            }
-        } else {
-            return $input;
-        }
-    }
+ini_set('memory_limit', '1024M');
 
+require_once dirname(__FILE__) . '/../init.php';
 
-    /**
-     * Method used to get the standard input.
-     *
-     * @access  public
-     * @return  string The standard input value
-     */
-    function getInput()
-    {
-        return fgets(STDIN);
-    }
+// if requested, clear the lock
+if (in_array('--fix-lock', $argv)) {
+    Lock::release('irc_bot_runner');
+    echo "The lock file was removed successfully.\n";
+    exit;
+}
+
+// acquire a lock to prevent multiple scripts from
+// running at the same time
+if (!Lock::acquire('irc_bot_runner', $check)) {
+    echo 'Error: Another instance of the script is still running. ',
+                "If this is not accurate, you may fix it by running this script with '--fix-lock' ",
+                "as the only parameter.\n";
+    exit;
+}
+
+while (true) {
+    $command = APP_PATH . '/irc/eventum-irc-bot';
+    `$command`;
+    `$command --fix-lock`;
 }

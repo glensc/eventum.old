@@ -222,6 +222,16 @@ class LDAP_Auth_Backend extends Abstract_Auth_Backend
         return $created;
     }
 
+    private function isLDAPuser($usr_id)
+    {
+        $local_user_info = User::getDetails($usr_id);
+        if (empty($local_user_info['usr_external_id'])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function verifyPassword($login, $password)
     {
         // check if this is an ldap or internal
